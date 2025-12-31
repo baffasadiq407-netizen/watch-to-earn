@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Farm Bot</title>
+    <script src="https://sad.adsgram.ai/js/adsgram-ad-sdk.js"></script>
+    <style>
+        body { font-family: sans-serif; text-align: center; background: #f0f0f0; padding-top: 50px; }
+        .farm-btn { background: #4CAF50; color: white; padding: 20px 40px; border: none; border-radius: 15px; font-size: 20px; cursor: pointer; }
+        #balance { font-size: 24px; margin-bottom: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Doge Farm 🐾</h1>
+    <div id="balance">Coins: <span id="coinCount">0</span></div>
+    <button class="farm-btn" onclick="showAd()">Click to Farm & Watch Ad</button>
+
+    <script>
+        let coins = 0;
+        // Adsgram ko initialize karein - APNI BLOCK ID YAHAN DALAIN
+        const AdController = window.Adsgram.init({ blockId: "YOUR_BLOCK_ID_HERE" });
+
+        function showAd() {
+            AdController.show().then((result) => {
+                // Ad khatam hone par reward
+                coins += 10;
+                document.getElementById('coinCount').innerText = coins;
+                alert("Adsgram reward: +10 Coins!");
+            }).catch((result) => {
+                alert("Ad nahi chal saka ya skip kiya gaya.");
+            });
+        }
+    </script>
+</body>
+</html>
