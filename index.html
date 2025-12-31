@@ -3,36 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Farm Bot</title>
+    <title>Doge Farm - Watch & Earn</title>
     <script src="https://sad.adsgram.ai/js/adsgram-ad-sdk.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; background: #f0f0f0; padding-top: 50px; }
-        .farm-btn { background: #4CAF50; color: white; padding: 20px 40px; border: none; border-radius: 15px; font-size: 20px; cursor: pointer; }
-        #balance { font-size: 24px; margin-bottom: 20px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            text-align: center; 
+            background-color: #f4f4f9; 
+            margin: 0; 
+            padding-top: 50px; 
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 { color: #333; }
+        #balance { font-size: 28px; font-weight: bold; color: #4CAF50; margin: 20px 0; }
+        .farm-btn { 
+            background: #4CAF50; 
+            color: white; 
+            padding: 15px 30px; 
+            border: none; 
+            border-radius: 12px; 
+            font-size: 18px; 
+            cursor: pointer; 
+            transition: transform 0.2s;
+        }
+        .farm-btn:active { transform: scale(0.95); }
+        .status-msg { margin-top: 15px; font-size: 14px; color: #888; }
     </style>
 </head>
 <body>
 
-    <h1>Doge Farm 🐾</h1>
-    <div id="balance">Coins: <span id="coinCount">0</span></div>
-    <button class="farm-btn" onclick="showAd()">Click to Farm & Watch Ad</button>
+    <div class="container">
+        <h1>Doge Farm 🐾</h1>
+        <div id="balance">Coins: <span id="coinCount">0</span></div>
+        <button class="farm-btn" onclick="showAd()">Click to Farm & Watch Ad</button>
+        <p class="status-msg" id="status">Click the button to start earning!</p>
+    </div>
 
     <script>
         let coins = 0;
-        // Adsgram ko initialize karein - APNI BLOCK ID YAHAN DALAIN
-        const AdController = window.Adsgram.init({ blockId: "20354" });
-
+        // Aapki Unit ID '20354' yahan set kar di gayi hai
+        const blockId = "20354"; 
+        
         function showAd() {
-            AdController.show().then((result) => {
-                // Ad khatam hone par reward
-                coins += 10;
-                document.getElementById('coinCount').innerText = coins;
-                alert("Adsgram reward: +10 Coins!");
-            }).catch((result) => {
-                alert("Ad nahi chal saka ya skip kiya gaya.");
-            });
+            const statusText = document.getElementById('status');
+            
+            // Check karein ke Adsgram load hua hai ya nahi
+            if (window.Adsgram) {
+                const AdController = window.Adsgram.init({ blockId: blockId });
+                statusText.innerText = "Loading Ad...";
+
+                AdController.show().then((result) => {
+                    // Ad poora dekhne par reward
+                    coins += 10;
+                    document.getElementById('coinCount').innerText = coins;
+                    statusText.innerText = "Success! +10 Coins added.";
+                    alert("Reward: 10 Coins Received!");
+                }).catch((result) => {
+                    // Agar user ad cancel kare ya error aaye
+                    console.error("Ad Error:", result);
+                    statusText.innerText = "Ad Error: " + (result.description || "Skipped");
+                    alert("Ad skip kiya gaya ya load nahi ho saka.");
+                });
+            } else {
+                statusText.innerText = "Error: Adsgram SDK not found!";
+                alert("Adsgram load nahi ho saka. Page refresh karein.");
+            }
         }
     </script>
 </body>
-
 </html>
